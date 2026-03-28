@@ -12,7 +12,7 @@ const navItems = [
 ];
 
 export default function Navbar() {
-  const { userProfile, language, updateLanguage } = useUser();
+  const { userProfile, language, updateLanguage, logout } = useUser();
   const location = useLocation();
   const navigate = useNavigate();
   const [langOpen, setLangOpen] = useState(false);
@@ -23,7 +23,7 @@ export default function Navbar() {
     <nav style={{
       position: 'fixed', top: 0, left: 0, right: 0,
       height: 64, zIndex: 1000,
-      background: 'rgba(5,8,16,0.85)',
+      background: 'rgba(0,0,0,0.85)',
       borderBottom: '1px solid rgba(255,255,255,0.07)',
       backdropFilter: 'blur(16px)',
       WebkitBackdropFilter: 'blur(16px)',
@@ -104,21 +104,43 @@ export default function Navbar() {
 
           {/* User avatar */}
           {userProfile ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={{
-                width: 32, height: 32, borderRadius: '50%',
-                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 13, fontWeight: 700, color: 'white',
-              }}>
-                {userProfile.name ? userProfile.name[0].toUpperCase() : 'U'}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{
+                  width: 32, height: 32, borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 13, fontWeight: 700, color: 'white',
+                }}>
+                  {userProfile.name ? userProfile.name[0].toUpperCase() : 'U'}
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: 13, color: '#f1f5f9', fontWeight: 600, lineHeight: 1 }}>{userProfile.name}</span>
+                  <span style={{ fontSize: 11, color: '#64748b', textTransform: 'capitalize' }}>{userProfile.role}</span>
+                </div>
               </div>
-              <span style={{ fontSize: 12, color: '#64748b', textTransform: 'capitalize' }}>{userProfile.role}</span>
+              <button 
+                onClick={() => { logout(); navigate('/'); }}
+                style={{
+                  background: 'transparent', border: 'none', color: '#ef4444', 
+                  fontSize: 11, fontWeight: 700, cursor: 'pointer', padding: '4px 8px',
+                  borderRadius: 4, transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => e.target.style.background = 'rgba(239, 68, 68, 0.1)'}
+                onMouseOut={(e) => e.target.style.background = 'transparent'}
+              >
+                LOGOUT
+              </button>
             </div>
           ) : (
-            <button onClick={() => navigate('/onboarding')} className="btn-primary" style={{ padding: '8px 18px', fontSize: 13 }}>
-              Get Started
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <button onClick={() => navigate('/onboarding')} className="btn-ghost" style={{ padding: '8px 16px', fontSize: 13, color: '#f8fafc' }}>
+                Log in
+              </button>
+              <button onClick={() => navigate('/onboarding')} className="btn-primary" style={{ padding: '8px 18px', fontSize: 13 }}>
+                Get Started
+              </button>
+            </div>
           )}
         </div>
       </div>

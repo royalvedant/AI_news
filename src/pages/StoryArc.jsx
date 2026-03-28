@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { storyArcs } from '../data/mockData';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, AreaChart, Area } from 'recharts';
 
 const arcKeys = Object.keys(storyArcs);
-
 const typeColors = { positive: '#10b981', negative: '#ef4444', neutral: '#f59e0b' };
 
 export default function StoryArc() {
@@ -17,178 +16,148 @@ export default function StoryArc() {
     type: m.type,
   }));
 
-  const CustomDot = ({ cx, cy, payload }) => {
-    const color = typeColors[payload.type];
-    return (
-      <g>
-        <circle cx={cx} cy={cy} r={6} fill={color} stroke="var(--bg-primary)" strokeWidth={2} />
-      </g>
-    );
-  };
-
   return (
     <div className="page-wrapper">
-      <div className="container" style={{ padding: '28px 24px' }}>
+      <div className="container" style={{ padding: '32px 24px' }}>
         {/* Header */}
-        <div style={{ marginBottom: 28 }}>
-          <div className="ai-pulse" style={{ marginBottom: 8 }}>Story Arc Intelligence</div>
-          <h1 style={{ fontSize: 28, fontFamily: 'Space Grotesk', marginBottom: 8 }}>
-            📊 Story Arc <span className="gradient-text">Tracker</span>
+        <div style={{ marginBottom: 32 }}>
+          <div className="ai-pulse" style={{ marginBottom: 12 }}>Temporal Intelligence Engine</div>
+          <h1 style={{ fontSize: 36, fontFamily: 'Space Grotesk', marginBottom: 12 }}>
+            Story <span className="gradient-text">Arc</span> Tracker
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 15 }}>
-            Track how major stories evolve — sentiment, key events, and player relationships
+          <p style={{ color: 'var(--text-secondary)', fontSize: 16, maxWidth: 600 }}>
+            Visualizing the evolution of market-moving narratives. Track sentiment shifts and key milestones across months of coverage.
           </p>
         </div>
 
-        {/* Arc selector */}
-        <div style={{ display: 'flex', gap: 10, marginBottom: 28, flexWrap: 'wrap' }}>
+        {/* Arc Selector */}
+        <div style={{ display: 'flex', gap: 12, marginBottom: 32, flexWrap: 'wrap' }}>
           {arcKeys.map(key => (
-            <button key={key} onClick={() => { setActiveArc(key); setSelected(null); }} className={`chip ${activeArc === key ? 'active' : ''}`}>
+            <button 
+              key={key} 
+              onClick={() => { setActiveArc(key); setSelected(null); }} 
+              className={`chip ${activeArc === key ? 'active' : ''}`}
+              style={{ padding: '10px 20px', fontSize: 14 }}
+            >
               {storyArcs[key].title}
             </button>
           ))}
         </div>
 
-        {/* Arc hero */}
-        <div className="card" style={{ padding: '20px 24px', marginBottom: 24, background: 'linear-gradient(135deg, rgba(59,130,246,0.07), rgba(139,92,246,0.05))' }}>
-          <h2 style={{ fontSize: 22, marginBottom: 4 }}>{arc.title}</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>{arc.subtitle}</p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 24, alignItems: 'start' }}>
-          <div>
-            {/* Sentiment chart */}
-            <div className="card" style={{ padding: '20px 24px', marginBottom: 24 }}>
-              <div className="section-label">📈 Sentiment Over Time</div>
-              <ResponsiveContainer width="100%" height={200}>
-                <LineChart data={chartData} margin={{ top: 8, right: 16, left: -20, bottom: 0 }}>
-                  <XAxis dataKey="name" tick={{ fill: '#475569', fontSize: 11 }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: '#475569', fontSize: 11 }} axisLine={false} tickLine={false} domain={[-100, 100]} />
-                  <Tooltip
-                    contentStyle={{ background: 'var(--bg-card)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: 10, fontSize: 12 }}
-                    itemStyle={{ color: '#93c5fd' }}
-                    labelStyle={{ color: '#94a3b8' }}
-                    formatter={(val) => [`${val > 0 ? '+' : ''}${val}`, 'Sentiment']}
-                  />
-                  <ReferenceLine y={0} stroke="rgba(255,255,255,0.1)" />
-                  <Line
-                    type="monotone"
-                    dataKey="sentiment"
-                    stroke="url(#sentGrad)"
-                    strokeWidth={2.5}
-                    dot={<CustomDot />}
-                    activeDot={{ r: 8, fill: '#3b82f6' }}
-                  />
-                  <defs>
-                    <linearGradient id="sentGrad" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#ef4444" />
-                      <stop offset="50%" stopColor="#f59e0b" />
-                      <stop offset="100%" stopColor="#10b981" />
-                    </linearGradient>
-                  </defs>
-                </LineChart>
-              </ResponsiveContainer>
-
-              <div style={{ display: 'flex', gap: 16, marginTop: 12, fontSize: 12 }}>
-                {Object.entries(typeColors).map(([type, color]) => (
-                  <div key={type} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: color }} />
-                    <span style={{ color: 'var(--text-muted)', textTransform: 'capitalize' }}>{type}</span>
-                  </div>
-                ))}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 32, alignItems: 'start' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            {/* Sentiment Area Chart */}
+            <div className="card" style={{ padding: '32px' }}>
+              <div className="section-label">Sentiment Trajectory</div>
+              <div style={{ height: 300, width: '100%', marginTop: 24 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorSent" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--accent-blue)" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="var(--accent-blue)" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <XAxis 
+                      dataKey="name" 
+                      tick={{ fill: 'var(--text-muted)', fontSize: 11 }} 
+                      axisLine={false} 
+                      tickLine={false} 
+                    />
+                    <YAxis 
+                      tick={{ fill: 'var(--text-muted)', fontSize: 11 }} 
+                      axisLine={false} 
+                      tickLine={false} 
+                      domain={[-100, 100]} 
+                    />
+                    <Tooltip
+                      contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-accent)', borderRadius: 12 }}
+                      itemStyle={{ color: 'var(--text-primary)', fontSize: 12 }}
+                    />
+                    <ReferenceLine y={0} stroke="var(--border-subtle)" strokeDasharray="3 3" />
+                    <Area 
+                      type="monotone" 
+                      dataKey="sentiment" 
+                      stroke="var(--accent-blue)" 
+                      fillOpacity={1} 
+                      fill="url(#colorSent)" 
+                      strokeWidth={3}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
-            {/* Timeline */}
-            <div className="card" style={{ padding: '20px 24px' }}>
-              <div className="section-label">🗓 Event Timeline</div>
-              <div style={{ position: 'relative' }}>
-                {/* Vertical line */}
-                <div style={{ position: 'absolute', left: 71, top: 0, bottom: 0, width: 2, background: 'rgba(255,255,255,0.06)' }} />
-
-                {arc.milestones.map((m, i) => {
-                  const color = typeColors[m.type];
-                  const isSel = selected === i;
-                  return (
-                    <div key={i} onClick={() => setSelected(isSel ? null : i)} style={{
-                      display: 'flex', gap: 20, marginBottom: 20, cursor: 'pointer',
-                      animation: `fadeInUp 0.4s ease ${i * 0.05}s both`,
-                    }}>
-                      {/* Year */}
-                      <div style={{ minWidth: 64, fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', paddingTop: 10, textAlign: 'right' }}>
-                        {m.year}
-                      </div>
-
-                      {/* Dot */}
-                      <div style={{ position: 'relative', display: 'flex', alignItems: 'flex-start', paddingTop: 12 }}>
-                        <div style={{ width: 12, height: 12, borderRadius: '50%', background: color, border: '2px solid var(--bg-primary)', zIndex: 1, flexShrink: 0 }} />
-                      </div>
-
-                      {/* Content */}
-                      <div style={{
-                        flex: 1, padding: '10px 14px', borderRadius: 12,
-                        background: isSel ? `${color}12` : 'var(--bg-glass)',
-                        border: `1px solid ${isSel ? color + '40' : 'rgba(255,255,255,0.06)'}`,
-                        transition: 'all 0.25s',
+            {/* Premium Timeline */}
+            <div className="card" style={{ padding: '32px' }}>
+              <div className="section-label">Event Narrative</div>
+              <div className="timeline" style={{ marginTop: 32 }}>
+                {arc.milestones.map((m, i) => (
+                  <div 
+                    key={i} 
+                    className="timeline-item" 
+                    onClick={() => setSelected(selected === i ? null : i)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className={`timeline-dot ${selected === i ? 'active' : ''}`} style={{ borderColor: typeColors[m.type] }} />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                      <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-muted)' }}>{m.year}</span>
+                      <span className="badge" style={{ 
+                        background: `${typeColors[m.type]}15`, 
+                        color: typeColors[m.type],
+                        borderColor: `${typeColors[m.type]}33`
                       }}>
-                        <p style={{ fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.5 }}>{m.event}</p>
-                        {isSel && (
-                          <div style={{ marginTop: 10, fontSize: 12, color: color, fontWeight: 600 }}>
-                            Sentiment Score: {m.sentiment > 0 ? '+' : ''}{Math.round(m.sentiment * 100)}
-                          </div>
-                        )}
-                      </div>
+                        {m.type}
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Key Players */}
-          <div>
-            <div className="card" style={{ padding: '20px' }}>
-              <div className="section-label">🕸 Key Players</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {arc.players.map((player, i) => (
-                  <div key={player} style={{
-                    padding: '10px 14px', borderRadius: 10,
-                    background: 'var(--bg-glass)', border: '1px solid rgba(255,255,255,0.06)',
-                    display: 'flex', alignItems: 'center', gap: 10,
-                    animation: `fadeInUp 0.4s ease ${i * 0.07}s both`,
-                  }}>
-                    <div style={{
-                      width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                      background: `hsl(${(i * 60) % 360}, 60%, 40%)`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 14, fontWeight: 700, color: 'white',
-                    }}>{player[0]}</div>
-                    <span style={{ fontSize: 13, fontWeight: 500 }}>{player}</span>
+                    <div style={{ 
+                      padding: '20px', 
+                      borderRadius: '16px', 
+                      background: selected === i ? 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1))' : 'var(--bg-glass)',
+                      border: selected === i ? '1px solid var(--border-accent)' : '1px solid var(--border-subtle)',
+                      boxShadow: selected === i ? 'var(--shadow-glow)' : 'none',
+                      transition: 'var(--transition-slow)'
+                    }}>
+                      <p style={{ fontSize: 15, color: 'var(--text-primary)', lineHeight: 1.6 }}>{m.event}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
-
-            {/* Sentiment summary */}
-            <div className="card" style={{ padding: '20px', marginTop: 20 }}>
-              <div className="section-label">📊 Sentiment Summary</div>
-              {(['positive', 'neutral', 'negative']).map(type => {
-                const count = arc.milestones.filter(m => m.type === type).length;
-                const pct = Math.round((count / arc.milestones.length) * 100);
-                return (
-                  <div key={type} style={{ marginBottom: 12 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5, fontSize: 13 }}>
-                      <span style={{ textTransform: 'capitalize', color: typeColors[type] }}>{type}</span>
-                      <span style={{ color: 'var(--text-muted)' }}>{pct}%</span>
-                    </div>
-                    <div style={{ height: 6, borderRadius: 3, background: 'var(--bg-glass)' }}>
-                      <div style={{ width: `${pct}%`, height: '100%', borderRadius: 3, background: typeColors[type], transition: 'width 0.8s ease' }} />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
           </div>
+
+          <aside style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            {/* Key Entities */}
+            <div className="card" style={{ padding: '24px' }}>
+              <div className="section-label">Key Entities</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
+                {arc.players.map((player) => (
+                  <span key={player} className="chip" style={{ fontSize: 12, padding: '8px 14px' }}>
+                    {player}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* AI Summary Card */}
+            <div className="card" style={{ 
+              padding: '24px', 
+              background: 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1))',
+              border: '1px solid var(--border-accent)'
+            }}>
+              <div className="ai-pulse" style={{ marginBottom: 12 }}>Arc Insight</div>
+              <p style={{ fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.6 }}>
+                This story arc shows a <strong>{arc.milestones.filter(m => m.type === 'positive').length > arc.milestones.filter(m => m.type === 'negative').length ? 'positive' : 'cautious'}</strong> recovery pattern. 
+                Recent events suggest the narrative is stabilizing around secondary infrastructure plays.
+              </p>
+              <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ flex: 1, height: 4, background: 'rgba(255,255,255,0.1)', borderRadius: 2 }}>
+                  <div style={{ width: '70%', height: '100%', background: 'var(--accent-blue)', borderRadius: 2 }} />
+                </div>
+                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent-blue)' }}>70% Stability</span>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </div>

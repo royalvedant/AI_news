@@ -4,6 +4,18 @@ import { useUser } from '../context/UserContext';
 
 const steps = [
   {
+    id: 0,
+    emoji: "👤",
+    title: "Basic Identity",
+    subtitle: "Tell us who you are to get started",
+    type: "input",
+    fields: [
+      { key: "name", label: "Full Name", placeholder: "e.g. Vedant Sonawane" },
+      { key: "username", label: "Username", placeholder: "e.g. vedant_ai" },
+      { key: "email", label: "Email ID", placeholder: "e.g. vedant@finpulse.ai" },
+    ]
+  },
+  {
     id: 1,
     emoji: "👋",
     title: "Tell us about you",
@@ -54,7 +66,14 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const { updateProfile, updateLanguage } = useUser();
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState({ role: '', interests: [], language: 'en' });
+  const [answers, setAnswers] = useState({ 
+    name: '', 
+    username: '', 
+    email: '', 
+    role: '', 
+    interests: [], 
+    language: 'en' 
+  });
   const [completing, setCompleting] = useState(false);
 
   const current = steps[step];
@@ -72,12 +91,20 @@ export default function Onboarding() {
     }
   };
 
+  const handleInputChange = (key, value) => {
+    setAnswers(a => ({ ...a, [key]: value }));
+  };
+
   const isSelected = (value) => {
     if (current.multi) return answers.interests.includes(value);
     return answers[current.field] === value;
   };
 
-  const canNext = current.multi ? answers.interests.length > 0 : !!answers[current.field];
+  const canNext = current.type === "input" 
+    ? current.fields.every(f => !!answers[f.key])
+    : current.multi 
+      ? answers.interests.length > 0 
+      : !!answers[current.field];
 
   const next = () => {
     if (step < steps.length - 1) {
@@ -90,7 +117,9 @@ export default function Onboarding() {
   const handleComplete = () => {
     setCompleting(true);
     const profile = {
-      name: "Vedant",
+      name: answers.name || "User",
+      username: answers.username,
+      email: answers.email,
       role: answers.role,
       interests: answers.interests,
       language: answers.language,
@@ -104,6 +133,7 @@ export default function Onboarding() {
   if (completing) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+        // ... (loading state remains same or can be cleaned up)
         <div style={{
           width: 80, height: 80, borderRadius: '50%',
           background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
@@ -111,7 +141,7 @@ export default function Onboarding() {
           fontSize: 36, animation: 'glow 1.5s ease infinite',
         }}>✅</div>
         <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 24 }}>Building your AI Newsroom…</h2>
-        <p style={{ color: 'var(--text-secondary)' }}>Personalizing your experience</p>
+        <p style={{ color: 'var(--text-secondary)' }}>Personalizing your experience for {answers.name}</p>
         <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
           {[0, 1, 2].map(i => (
             <div key={i} style={{
@@ -134,7 +164,6 @@ export default function Onboarding() {
             <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <div style={{
                 width: 28, height: 28, borderRadius: '50%',
-                background: i < step ? 'var(--accent-green)' : i === step ? 'var(--gradient-primary)' : 'var(--bg-card)',
                 background: i < step ? '#10b981' : i === step ? 'linear-gradient(135deg,#3b82f6,#8b5cf6)' : 'var(--bg-card)',
                 border: i === step ? '2px solid #3b82f6' : '2px solid rgba(255,255,255,0.07)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -145,7 +174,7 @@ export default function Onboarding() {
               </div>
               {i < steps.length - 1 && (
                 <div style={{
-                  height: 2, width: 120,
+                  height: 2, width: 90,
                   background: i < step ? 'var(--accent-blue)' : 'rgba(255,255,255,0.07)',
                   transition: 'all 0.3s',
                 }} />
@@ -153,7 +182,7 @@ export default function Onboarding() {
             </div>
           ))}
         </div>
-        <div style={{ fontSize: 13, color: 'var(--text-muted)', textAlign: 'right' }}>
+        <div style={{ fontSize: 13, color: 'var(--text-muted)', textAlign: 'right', marginTop: 8 }}>
           Step {step + 1} of {steps.length}
         </div>
       </div>
@@ -165,30 +194,48 @@ export default function Onboarding() {
           <h2 style={{ fontSize: 26, marginBottom: 6 }}>{current.title}</h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: 28, fontSize: 15 }}>{current.subtitle}</p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: current.multi ? 'repeat(2,1fr)' : '1fr', gap: 10 }}>
-            {current.options.map(opt => {
-              const sel = isSelected(opt.value);
-              return (
-                <button key={opt.value} onClick={() => select(opt.value)} style={{
-                  display: 'flex', alignItems: 'center', gap: 12,
-                  padding: '14px 16px', borderRadius: 12, cursor: 'pointer',
-                  background: sel ? 'rgba(59,130,246,0.12)' : 'var(--bg-glass)',
-                  border: sel ? '1px solid rgba(59,130,246,0.5)' : '1px solid rgba(255,255,255,0.07)',
-                  color: sel ? '#93c5fd' : 'var(--text-primary)',
-                  fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500,
-                  transition: 'all 0.2s', textAlign: 'left',
-                  transform: sel ? 'scale(1.01)' : 'scale(1)',
-                }}>
-                  <span style={{ fontSize: 20 }}>{opt.icon}</span>
-                  <div>
-                    <div style={{ fontWeight: 600 }}>{opt.label}</div>
-                    {opt.desc && <div style={{ fontSize: 12, color: sel ? '#93c5fd99' : 'var(--text-muted)', marginTop: 2 }}>{opt.desc}</div>}
-                  </div>
-                  {sel && <span style={{ marginLeft: 'auto', color: 'var(--accent-blue)', fontSize: 16 }}>✓</span>}
-                </button>
-              );
-            })}
-          </div>
+          {current.type === "input" ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              {current.fields.map(f => (
+                <div key={f.key}>
+                  <label style={{ display: 'block', fontSize: 13, color: 'var(--text-muted)', marginBottom: 8, fontWeight: 500 }}>{f.label}</label>
+                  <input 
+                    type="text"
+                    className="input-field"
+                    placeholder={f.placeholder}
+                    value={answers[f.key]}
+                    onChange={(e) => handleInputChange(f.key, e.target.value)}
+                    style={{ width: '100%', padding: '14px 16px' }}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: current.multi ? 'repeat(2,1fr)' : '1fr', gap: 10 }}>
+              {current.options.map(opt => {
+                const sel = isSelected(opt.value);
+                return (
+                  <button key={opt.value} onClick={() => select(opt.value)} style={{
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    padding: '14px 16px', borderRadius: 12, cursor: 'pointer',
+                    background: sel ? 'rgba(59,130,246,0.12)' : 'var(--bg-glass)',
+                    border: sel ? '1px solid rgba(59,130,246,0.5)' : '1px solid rgba(255,255,255,0.07)',
+                    color: sel ? '#93c5fd' : 'var(--text-primary)',
+                    fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500,
+                    transition: 'all 0.2s', textAlign: 'left',
+                    transform: sel ? 'scale(1.01)' : 'scale(1)',
+                  }}>
+                    <span style={{ fontSize: 20 }}>{opt.icon}</span>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>{opt.label}</div>
+                      {opt.desc && <div style={{ fontSize: 12, color: sel ? '#93c5fd99' : 'var(--text-muted)', marginTop: 2 }}>{opt.desc}</div>}
+                    </div>
+                    {sel && <span style={{ marginLeft: 'auto', color: 'var(--accent-blue)', fontSize: 16 }}>✓</span>}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           <button className="btn-primary" onClick={next} disabled={!canNext} style={{
             width: '100%', marginTop: 28, justifyContent: 'center', fontSize: 15,

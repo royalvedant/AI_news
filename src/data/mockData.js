@@ -1,4 +1,3 @@
-// ─── Mock News Articles ───────────────────────────────────────────────────────
 export const newsArticles = [
   {
     id: 1,
@@ -13,7 +12,11 @@ export const newsArticles = [
     readTime: "4 min",
     aiInsight: "Rate cut will lower EMIs for home & auto loans, boosting real estate and auto sectors.",
     stocks: [{ name: "HDFC Bank", change: "+2.3%" }, { name: "SBI", change: "+1.8%" }],
+    trustScore: 96,
+    storyArc: 'rbi',
+    videoScript: "RBI is signaling a pivot! With inflation hitting an 18-month low, the repo rate cut is finally on the horizon. This means lower EMIs for your home loans and a boost for banking stocks like HDFC and SBI.",
     relevantFor: ["investor", "student", "professional"],
+    thumbnail: "https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: 2,
@@ -28,7 +31,11 @@ export const newsArticles = [
     readTime: "5 min",
     aiInsight: "Extended tax holiday will boost startup funding and encourage new company formation in Tier-2 cities.",
     stocks: [{ name: "Zomato", change: "+4.1%" }, { name: "Paytm", change: "+3.6%" }],
+    trustScore: 92,
+    storyArc: 'budget',
+    videoScript: "Big win for Indian founders! The 2026 Budget just extended the startup tax holiday to 15 years. This is a massive play to keep unicorns in India and spur innovation in Tier-2 cities.",
     relevantFor: ["founder", "investor"],
+    thumbnail: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: 3,
@@ -43,7 +50,11 @@ export const newsArticles = [
     readTime: "3 min",
     aiInsight: "Sustained FII buying signals renewed confidence in India's growth story. Mid-caps may outperform.",
     stocks: [{ name: "Reliance", change: "+3.2%" }, { name: "TCS", change: "+2.1%" }],
+    trustScore: 98,
+    storyArc: 'rbi',
+    videoScript: "Bulls are back on Dalal Street! FIIs have pumped in over 8,400 crores today, driving Sensex up by 1,200 points. The sentiment is clear: global investors are betting big on India's resilience.",
     relevantFor: ["investor", "professional"],
+    thumbnail: "https://images.unsplash.com/photo-1611974714405-b6d36e78b7ce?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: 4,
@@ -58,7 +69,11 @@ export const newsArticles = [
     readTime: "6 min",
     aiInsight: "Understanding repo rate is foundational to tracking all monetary policy decisions.",
     stocks: [],
+    trustScore: 99,
+    storyArc: 'rbi',
+    videoScript: "Money basics! Do you know what the Repo Rate is? It's the rate of interest at which RBI lends to banks. When this goes down, your borrowing costs usually follow. Stay smart, stay invested.",
     relevantFor: ["student", "reader"],
+    thumbnail: "https://images.unsplash.com/photo-1454165833767-02a6ed8a487c?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: 5,
@@ -73,7 +88,11 @@ export const newsArticles = [
     readTime: "5 min",
     aiInsight: "Fintech leads the charge — expect more IPO activity in 2026 H2.",
     stocks: [{ name: "Nazara Tech", change: "+5.2%" }],
+    trustScore: 91,
+    storyArc: 'budget',
+    videoScript: "The funding winter is over! Q1 2026 saw a 45% jump in startup funding, reaching 4.2 billion dollars. Fintech and SaaS are the darlings of the VC world again.",
     relevantFor: ["founder", "investor"],
+    thumbnail: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: 6,
@@ -88,7 +107,11 @@ export const newsArticles = [
     readTime: "4 min",
     aiInsight: "Regulated crypto market could attract $10B+ in institutional funds to Indian exchanges.",
     stocks: [{ name: "CoinDCX", change: "Private" }],
+    trustScore: 88,
+    storyArc: 'budget',
+    videoScript: "A new era for Digital Assets! India has finally passed the Crypto Regulation Bill. Exchanges will now operate under SEBI oversight, bringing much-needed legitimacy to the space.",
     relevantFor: ["investor", "student", "founder"],
+    thumbnail: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: 7,
@@ -103,7 +126,11 @@ export const newsArticles = [
     readTime: "3 min",
     aiInsight: "Low inflation gives RBI room to cut rates, benefiting bond markets and rate-sensitive sectors.",
     stocks: [{ name: "Housing Finance", change: "+2.8%" }],
+    trustScore: 95,
+    storyArc: 'rbi',
+    videoScript: "The heat is off the economy! CPI inflation has dropped to 4.1%, the lowest in 18 months. This paves the way for the RBI to finally ease rates and stimulate growth.",
     relevantFor: ["student", "investor", "professional"],
+    thumbnail: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: 8,
@@ -118,7 +145,11 @@ export const newsArticles = [
     readTime: "4 min",
     aiInsight: "Tata EV dominance may face pressure from upcoming BYD and Hyundai launches in H2 2026.",
     stocks: [{ name: "Tata Motors", change: "+6.7%" }],
+    trustScore: 94,
+    storyArc: 'budget',
+    videoScript: "Tata is driving the EV revolution! Crossing 50,000 units in sales this fiscal, Tata Motors continues to dominate with nearly 70% market share. But can they hold off global competitors?",
     relevantFor: ["investor", "professional"],
+    thumbnail: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=800",
   },
 ];
 
